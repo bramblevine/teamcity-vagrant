@@ -2,13 +2,13 @@
 
 NTP_SERVER=time.euro.apple.com
 
-JDK=jdk1.7.0_45
-JDK_FILE=jdk-7u45-linux-x64.tar.gz
+JDK=jdk1.7.0_51
+JDK_FILE=jdk-7u51-linux-x64.tar.gz
 
-TOMCAT_VERS=7.0.50
+TOMCAT_VERS=7.0.53
 TOMCAT=apache-tomcat-${TOMCAT_VERS}
 TOMCAT_DIR=/opt/$TOMCAT
-TOMCAT_URL=http://www.eu.apache.org/dist/tomcat/tomcat-7/v${TOMCAT_VERS}/bin/${TOMCAT}.zip
+TOMCAT_URL=http://search.maven.org/remotecontent?filepath=org/apache/tomcat/tomcat/${TOMCAT_VERS}/tomcat-${TOMCAT_VERS}.zip
 
 MYSQL_JDBC_VERS=5.1.28
 MYSQL_JDBC_JAR=mysql-connector-java-${MYSQL_JDBC_VERS}.jar
@@ -20,7 +20,7 @@ TEAMCITY_DB_USER=teamcity
 TEAMCITY_DB_PASS=teamcity
 
 TEAMCITY_DIR=/opt/teamcity-server
-TEAMCITY_WAR=TeamCity-8.0.6.war
+TEAMCITY_WAR=TeamCity-8.1.2.war
 TEAMCITY_URL=http://download.jetbrains.com/teamcity/$TEAMCITY_WAR
 TEAMCITY_USER=teamcity
 TEAMCITY_GROUP=teamcity
@@ -29,6 +29,7 @@ TEAMCITY_GROUP=teamcity
 if [ -f /etc/redhat-release ]; then
     yum -y install ntp
 else
+    #sed -i -e 's/(us\.archive|archive|security)\.ubuntu\.com/apt-mirror.ciboodle.com/g' /etc/apt/sources.list
     apt-get update -y
     apt-get install -y -q ntp
     apt-get install -y -q unzip
@@ -74,7 +75,7 @@ if [ ! -d /opt/$JDK ]; then
 fi
 if [ ! -d $TOMCAT_DIR ]; then
     if [ ! -f /vagrant/files/$TOMCAT.zip ]; then
-        wget -q --no-proxy $TOMCAT_URL -P /vagrant/files
+        wget -q --no-proxy $TOMCAT_URL -O /vagrant/files/$TOMCAT.zip
     fi
     unzip -q /vagrant/files/$TOMCAT.zip -d /opt
     chmod +x $TOMCAT_DIR/bin/*.sh
